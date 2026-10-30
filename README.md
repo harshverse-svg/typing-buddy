@@ -51,11 +51,11 @@ As you type in Notepad, Word, Slack, or your browser, a clean floating pill appe
 
 ## Why Typing Buddy?
 
-- 🔒 **100% Offline with Zero Network Code:** Contains no HTTP client, no analytics, and no sockets. Verified by automated AST code analysis.
+- 🔒 **Zero Network Code in App Package:** The app's own code contains no network code (no HTTP, analytics, or sockets). Verified by our static AST checker (`tools/check_no_network.py`). Third-party libraries are not scanned. Read the source.
 - ⚡ **RAM-Only Volatile Tracking:** Sentence tracking stays in RAM (max 300 characters) and is wiped on mouse clicks, arrow navigation, or focus switch. Never logged or saved to disk.
-- 🛡️ **Password Safety:** Automatically pauses whenever your cursor enters a password field or sensitive window.
+- 🛡️ **Password Safety:** Automatically pauses when a password field is detected; customizable process blocklist.
 - 💬 **Hinglish Word Pack:** Romanized Hindi expressions (`kya`, `theek`, `accha`, `yaar`) are recognized without false typo or grammar flags.
-- 🪶 **Ultra Lightweight:** Low idle CPU usage in our testing (~0.0% when inactive). Average suggestion lookup latency is sub-millisecond (< 0.2 ms).
+- 🪶 **Measured Performance:** Measured on Windows 11 64-bit (Python 3.14, 2026-10-30 via `tools/benchmark.py`): ~0.02 ms average suggestion lookup latency, ~0.8 ms grammar check latency, and ~122 MB base memory footprint.
 
 ---
 
@@ -248,11 +248,13 @@ Right-click the Typing Buddy icon in your notification area to quickly toggle wo
 
 Switch word packs on the fly from the System Tray menu or `%APPDATA%\typing-buddy\settings.json`:
 
-| Pack | Words | RAM Footprint | Notes |
+| Pack | Words | RAM Footprint* | Notes |
 |---|---|---|---|
-| **`en-basic`** | 5,000 | ~125 MB | Enabled by default; covers common everyday English vocabulary. |
-| **`en-large`** | 150,000 | ~330 MB | Optional; comprehensive dictionary for academic & technical writing. |
+| **`en-basic`** | 5,000 | ~122 MB | Enabled by default; core English vocabulary. |
+| **`en-large`** | 150,000 | ~333 MB | Optional; expanded dictionary for technical and literary writing. |
 | **`hinglish`** | 320+ | < 1 MB | Common Roman-script Hindi dialogue (`kya`, `haan`, `theek`, `accha`). |
+
+*\*Memory measured on Windows 11 64-bit (Python 3.14, 2026-10-30) including the integrated Harper grammar checker.*
 
 To list packs from terminal:
 ```cmd
@@ -267,9 +269,10 @@ Your settings reside safely in `%APPDATA%\typing-buddy\settings.json`:
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `pick_keys` | `list[str]` | `["f2", "f3", "f4"]` | Keys to select suggestions (supports `"1"`, `"2"`, `"3"`). |
-| `enable_tab_pick` | `bool` | `true` | Allows pressing `Tab` to accept first suggestion. |
+| `pick_keys` | `list[str]` | `["F2", "F3", "F4"]` | Keys to select suggestions (supports F1–F12 and Tab). |
+| `tab_picks_first` | `bool` | `true` | Allows pressing `Tab` to accept first suggestion. |
 | `pause_key` | `str` | `"pause"` | Global hotkey to toggle pause (`"pause"`, `"f12"`). |
+| `new_word_mode` | `str` | `"review"` | Learning behavior: `"review"` (queue for manual approval), `"auto"` (auto-add), or `"off"`. |
 | `word_packs` | `list[str]` | `["en-basic"]` | Enabled word pack IDs. |
 | `grammar_enabled` | `bool` | `true` | Enables offline grammar feedback. |
 | `grammar_show_reason` | `bool` | `true` | Shows grammatical explanation subtitle under pills. |
@@ -279,15 +282,16 @@ Your settings reside safely in `%APPDATA%\typing-buddy\settings.json`:
 
 ## Privacy & Security
 
-Typing Buddy is built on a **zero-trust local privacy architecture**:
+Typing Buddy is built on a **privacy-by-default local architecture**:
 
-- **No Network Imports:** You can verify with our automated Abstract Syntax Tree scanner:
+- **No Network Code in Application:** The app's own code contains no network code. Third-party libraries are not scanned. Read the source. You can audit the codebase with our static AST scanner:
   ```cmd
   python tools/check_no_network.py
   ```
 - **Volatile Text Buffer:** Sentence context is tracked in RAM only (`TextTracker`, 300 char cap). It is wiped on clicks, cursor navigation, window changes, and pauses.
+- **Privacy by Default:** Discovered unknown words enter a review queue (`new_word_mode: "review"`) and are never written to `personal_words.txt` without your approval. Word pairs are recorded only between known words.
 - **Is this a Keylogger?**  
-  Keyloggers secretly record and save your sentences to disk or transmit them to cloud servers. Typing Buddy does neither: it runs 100% offline, stores zero sentence logs, only counts individual word frequencies for ranking, and is fully open source. Read [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md).
+  Keyloggers secretly record and save your sentences to disk or transmit them to cloud servers. Typing Buddy does neither: it runs 100% offline, stores zero sentence logs, only counts individual known-word frequencies for ranking, and is fully open source. Read [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md).
 
 ---
 
