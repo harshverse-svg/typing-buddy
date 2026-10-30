@@ -3,7 +3,7 @@ import json
 import os
 import tempfile
 
-from settings import DEFAULT_SETTINGS, Settings, validate_settings
+from typing_buddy.settings import DEFAULT_SETTINGS, Settings, validate_settings
 
 
 def test_validate_defaults():
@@ -48,7 +48,7 @@ def test_validate_invalid_values_fallback():
         "popup_font_size": 1,        # < 8 -> default
         "popup_opacity": 5.0,        # > 1.0 -> default
         "autocorrect_mode": "magic", # not suggest/off -> default
-        "word_files": []             # empty list -> default
+        "word_packs": "invalid"      # not a list -> default
     }
     cleaned = validate_settings(raw)
     assert cleaned["min_prefix"] == DEFAULT_SETTINGS["min_prefix"]
@@ -58,7 +58,7 @@ def test_validate_invalid_values_fallback():
     assert cleaned["popup_font_size"] == DEFAULT_SETTINGS["popup_font_size"]
     assert cleaned["popup_opacity"] == DEFAULT_SETTINGS["popup_opacity"]
     assert cleaned["autocorrect_mode"] == DEFAULT_SETTINGS["autocorrect_mode"]
-    assert cleaned["word_files"] == DEFAULT_SETTINGS["word_files"]
+    assert cleaned["word_packs"] == DEFAULT_SETTINGS["word_packs"]
 
 
 def test_settings_file_load_and_reload():

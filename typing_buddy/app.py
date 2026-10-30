@@ -594,7 +594,7 @@ def main():
     global predictor, fuzzy_engine, grammar_checker, overlay, listener, tray, settings, snippets_mgr, stats_tracker, data_directory, PICK_KEYS
 
     parser = argparse.ArgumentParser(description="Typing Buddy - Windows Typing Assistant")
-    parser.add_argument("--data-dir", help="Path to user data directory (defaults to %APPDATA%\\typing-buddy)")
+    parser.add_argument("--data-dir", help="Path to user data directory (defaults to %%APPDATA%%\\typing-buddy)")
     parser.add_argument("--version", action="version", version=f"Typing Buddy {__version__}")
     subparsers = parser.add_subparsers(dest="subcommand")
 

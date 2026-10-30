@@ -2,7 +2,7 @@
 import os
 import tempfile
 
-from stats import StatsTracker
+from typing_buddy.stats import StatsTracker
 
 
 def test_stats_recording_and_summary():

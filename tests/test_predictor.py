@@ -2,7 +2,7 @@
 import os
 import tempfile
 
-from predictor import Predictor, load_wordlist
+from typing_buddy.predictor import Predictor, load_wordlist
 
 
 def test_load_wordlist_plain():

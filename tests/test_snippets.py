@@ -3,7 +3,7 @@ import datetime
 import os
 import tempfile
 
-from snippets import SnippetsManager
+from typing_buddy.snippets import SnippetsManager
 
 
 def test_snippet_expansion_basic():
