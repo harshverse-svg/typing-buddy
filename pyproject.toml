@@ -1,0 +1,84 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "typing-buddy"
+version = "1.0.0"
+description = "Fast, privacy-first offline typing assistant, autocomplete, spelling corrections, and grammar for Windows"
+readme = "README.md"
+authors = [{ name = "Typing Buddy Contributors" }]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+keywords = [
+    "typing-buddy",
+    "autocomplete",
+    "word-suggestions",
+    "grammar-checker",
+    "typo-correction",
+    "offline",
+    "privacy",
+    "windows",
+    "python",
+    "pynput",
+    "harper",
+    "hinglish",
+    "writing-assistant",
+    "productivity",
+    "no-telemetry"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Text Editors :: Text Processing",
+    "Topic :: Utilities"
+]
+dependencies = [
+    "pynput>=1.8.2",
+    "pystray>=0.19.5",
+    "Pillow>=10.0.0",
+    "comtypes>=1.4.0"
+]
+
+[project.optional-dependencies]
+grammar = [
+    "harper-py==0.2.0"
+]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.4.0",
+    "psutil>=5.9.0"
+]
+
+[project.scripts]
+typing-buddy = "typing_buddy.app:main"
+typing-suggest = "typing_buddy.app:main"
+
+[project.urls]
+Homepage = "https://github.com/harshverse-svg/typing-buddy"
+Source = "https://github.com/harshverse-svg/typing-buddy"
+Issues = "https://github.com/harshverse-svg/typing-buddy/issues"
+Changelog = "https://github.com/harshverse-svg/typing-buddy/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["typing_buddy*"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]

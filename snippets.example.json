@@ -1,0 +1,7 @@
+{
+  "addr": "123 Example Street, Springfield",
+  "sig": "Best regards,\nYour Name",
+  "today": "Today is {date}",
+  "now": "Current time: {time}"
+}
+

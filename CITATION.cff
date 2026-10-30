@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use or reference Typing Buddy in research or software, please cite it as below."
+title: "Typing Buddy: An Offline, Privacy-First Typing Assistant and Autocomplete for Windows"
+authors:
+  - name: "Typing Buddy Contributors"
+version: 1.0.0
+date-released: 2026-04-12
+license: MIT
+url: "https://github.com/harshverse-svg/typing-buddy"
+repository-code: "https://github.com/harshverse-svg/typing-buddy"
+keywords:
+  - "typing-assistant"
+  - "autocomplete"
+  - "word-suggestions"
+  - "grammar-checker"
+  - "offline"
+  - "privacy"
+  - "windows"
+  - "python"

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="keyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- Base Squircle -->
+  <rect x="40" y="40" width="432" height="432" rx="100" fill="url(#blueGrad)" filter="url(#shadow)" stroke="#1e40af" stroke-width="8"/>
+  <!-- Key Cap Layer -->
+  <rect x="72" y="72" width="368" height="368" rx="72" fill="url(#keyGrad)"/>
+  <!-- Typing Cursor Bar -->
+  <rect x="176" y="144" width="44" height="224" rx="22" fill="#ffffff"/>
+  <!-- Sparkle (4-point star) -->
+  <path d="M 336 172 Q 336 248 412 248 Q 336 248 336 324 Q 336 248 260 248 Q 336 248 336 172 Z" fill="#fbbf24"/>
+</svg>

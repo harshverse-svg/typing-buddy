@@ -1,0 +1,43 @@
+# Typing Buddy
+
+> The offline, privacy-first typing assistant and autocomplete for Windows.
+
+## Project Summary
+Typing Buddy is an open-source Windows desktop utility that provides instant word completions, fuzzy spelling corrections, abbreviation snippets, and real-time offline grammar suggestions as users type across any Windows application. It runs 100% locally on the CPU with zero network code, no telemetry, and volatile RAM-only sentence tracking.
+
+## Core Capabilities
+- **Trie-Based Autocomplete:** Sub-millisecond unigram and bigram word completions from bundled offline word packs (`wordpacks/en-basic`, `wordpacks/en-large`, `wordpacks/hinglish`).
+- **Fuzzy Typo Correction:** Damerau-Levenshtein distance algorithm with QWERTY keyboard physical adjacency weights.
+- **Offline Grammar Checking:** Integrated Harper engine (`harper-py`) allow-listing syntactic rules (subject-verb agreement, confusing word choices, repeated words) while strictly suppressing spelling lints.
+- **Strict Privacy Architecture:** No internet access, no analytics, no persistent sentence logging. Rolling sentence buffer (`TextTracker`) is capped at 300 characters in RAM and erased on cursor movement or window changes.
+- **Password Field Protection:** Automatically detects Windows UI Automation (UIA) password fields and process blocklists, putting the tool into an auto-paused state.
+- **Windows Integration:** Native desktop shortcuts, Windows Start search support, system tray indicator with status colors (Green/Orange/Grey), and single-instance mutex.
+
+## Target Audience
+Windows 10 and 11 users seeking fast, system-wide typing completions and grammar feedback without sacrificing personal privacy, sending keystrokes to cloud servers, or paying subscriptions.
+
+## Quick Installation
+Requires Windows 10/11 and Python >= 3.10:
+```cmd
+git clone https://github.com/harshverse-svg/typing-buddy.git
+cd typing-buddy
+install.bat
+```
+Run `start.bat` to launch in the background.
+
+## Key Files & Structure
+- `typing_buddy/app.py`: Main runtime, event hooks, threading pipelines, and GUI overlays.
+- `typing_buddy/data_dir.py`: User data folder isolation (`%APPDATA%\typing-buddy\`) and safe one-time migrations.
+- `typing_buddy/predictor.py`: Word lookup, trie caching, and unigram/bigram frequency ranking.
+- `typing_buddy/fuzzy.py`: Damerau-Levenshtein typo correction engine.
+- `typing_buddy/grammar/`: Offline sentence-level grammar linting via Harper adapter.
+- `typing_buddy/tray.py`: Dynamic notification area icon and configuration menu.
+- `typing_buddy/winapi.py`: Low-level Windows API wrappers (UIA password checks, caret coordinates, startup shortcuts).
+- `tools/check_no_network.py`: AST parser verifying complete absence of network libraries.
+- `tools/check_no_personal_data.py`: Pre-commit/CI validator preventing sensitive file leakage.
+
+## Technical Specifications
+- Language: Python 3.10+
+- Platform: Microsoft Windows 10 / 11 (64-bit)
+- Dependencies: `pynput`, `pystray`, `Pillow`, `comtypes`, `harper-py` (optional)
+- License: MIT License (Third-party licenses in THIRD_PARTY_NOTICES.md)

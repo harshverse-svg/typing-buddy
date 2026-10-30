@@ -1,0 +1,10 @@
+{
+  "name": "en-basic",
+  "version": "1.0.0",
+  "description": "Essential English vocabulary covering the top 5,000 most frequent words.",
+  "language": "en",
+  "license": "Public Domain / MIT",
+  "source": "Derived from Google Web Trillion Word Corpus & SCOWL",
+  "word_count": 5000
+}
+

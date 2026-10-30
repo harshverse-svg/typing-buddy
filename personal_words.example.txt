@@ -1,0 +1,8 @@
+# personal_words.txt - Your personal custom word list.
+# Format: word<TAB>frequency (1-250, higher = suggested first).
+# Unknown words that you type 3+ times will automatically be appended here.
+# Lines starting with # are comments.
+antigravity	200
+python	200
+github	200
+

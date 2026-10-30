@@ -1,0 +1,10 @@
+{
+  "name": "en-large",
+  "version": "1.0.0",
+  "description": "Comprehensive English vocabulary with ~150,000 words for wide vocabulary coverage.",
+  "language": "en",
+  "license": "Public Domain / MIT",
+  "source": "Hermit Dave FrequencyWords & SCOWL dictionary headwords",
+  "word_count": 150000
+}
+

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; rx: 16px; }
+      .box { fill: #1e293b; stroke: #3b82f6; stroke-width: 2px; rx: 12px; }
+      .title { fill: #f8fafc; font-family: Segoe UI, system-ui, sans-serif; font-size: 18px; font-weight: 600; text-anchor: middle; }
+      .sub { fill: #94a3b8; font-family: Segoe UI, system-ui, sans-serif; font-size: 13px; text-anchor: middle; }
+      .arrow { stroke: #60a5fa; stroke-width: 2.5px; fill: none; marker-end: url(#arrowhead); }
+      .privacy-badge { fill: #22c55e; font-family: Segoe UI, sans-serif; font-size: 13px; font-weight: bold; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#60a5fa" />
+    </marker>
+  </defs>
+
+  <rect width="960" height="360" class="bg" />
+
+  <!-- Header -->
+  <text x="480" y="45" class="title" font-size="22">Typing Buddy Offline Architecture</text>
+  <text x="480" y="72" class="sub" font-size="14">Strict local privacy — zero network calls, RAM-only rolling buffer, no text saved to disk</text>
+
+  <!-- Step 1: User Keystrokes -->
+  <rect x="50" y="120" width="180" height="130" class="box" />
+  <text x="140" y="160" class="title">1. Keystrokes</text>
+  <text x="140" y="188" class="sub">pynput Global Hook</text>
+  <text x="140" y="210" class="sub">Non-blocking</text>
+  <text x="140" y="230" class="sub">Auto-pauses on password</text>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 230 185 L 285 185" class="arrow" />
+
+  <!-- Step 2: RAM-Only Buffer -->
+  <rect x="290" y="120" width="180" height="130" class="box" />
+  <text x="380" y="160" class="title">2. Volatile RAM</text>
+  <text x="380" y="188" class="sub">TextTracker buffer</text>
+  <text x="380" y="210" class="sub">Capped at 300 chars</text>
+  <text x="380" y="230" class="sub">Wiped on click / pause</text>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 470 185 L 525 185" class="arrow" />
+
+  <!-- Step 3: Offline Engines -->
+  <rect x="530" y="120" width="180" height="130" class="box" />
+  <text x="620" y="160" class="title">3. Offline Engines</text>
+  <text x="620" y="188" class="sub">Word Packs (Trie cache)</text>
+  <text x="620" y="210" class="sub">Fuzzy Spelling D-L</text>
+  <text x="620" y="230" class="sub">Harper Grammar Linter</text>
+
+  <!-- Arrow 3 -> 4 -->
+  <path d="M 710 185 L 765 185" class="arrow" />
+
+  <!-- Step 4: Floating Overlay -->
+  <rect x="770" y="120" width="150" height="130" class="box" />
+  <text x="845" y="160" class="title">4. Popup UI</text>
+  <text x="845" y="188" class="sub">Floating Overlay</text>
+  <text x="845" y="210" class="sub">Never steals focus</text>
+  <text x="845" y="230" class="sub">Pick with F2/F3/Tab</text>
+
+  <!-- Bottom Privacy Banner -->
+  <rect x="180" y="290" width="600" height="40" rx="8" fill="#14532d" />
+  <text x="480" y="315" text-anchor="middle" fill="#86efac" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600">
+    🔒 Verified: Zero Sockets • Zero HTTP Requests • Zero Keystroke Logs
+  </text>
+</svg>

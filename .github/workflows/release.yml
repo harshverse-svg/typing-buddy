@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-release:
+    name: Build Release Package
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Prepare Release Archive
+        shell: powershell
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $archiveName = "typing-buddy-$tag.zip"
+          
+          # Stage clean release directory
+          $stage = "release_stage"
+          New-Item -ItemType Directory -Path $stage | Out-Null
+          
+          # Copy source, scripts, wordpacks, assets, and docs
+          Copy-Item -Recurse -Path "typing_buddy" -Destination "$stage/typing_buddy"
+          Copy-Item -Recurse -Path "wordpacks" -Destination "$stage/wordpacks"
+          Copy-Item -Recurse -Path "assets" -Destination "$stage/assets"
+          Copy-Item -Recurse -Path "tools" -Destination "$stage/tools"
+          Copy-Item -Path "install.bat", "start.bat", "uninstall.bat", "pyproject.toml" -Destination "$stage/"
+          Copy-Item -Path "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "PRIVACY.md", "SECURITY.md", "CHANGELOG.md" -Destination "$stage/"
+          Copy-Item -Path "settings.example.json", "snippets.example.json", "personal_words.example.txt" -Destination "$stage/"
+          
+          # Compress to zip
+          Compress-Archive -Path "$stage/*" -DestinationPath $archiveName -Force
+          
+          # Calculate SHA256 checksum
+          $hash = (Get-FileHash -Path $archiveName -Algorithm SHA256).Hash.ToLower()
+          "$hash  $archiveName" | Out-File -Encoding ascii -FilePath "SHA256SUMS.txt"
+          
+          Write-Host "Archive created: $archiveName"
+          Write-Host "Checksum: $hash"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            typing-buddy-*.zip
+            SHA256SUMS.txt
+          generate_release_notes: true

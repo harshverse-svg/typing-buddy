@@ -1,0 +1,84 @@
+name: Bug Report
+description: Report an issue or unexpected behavior in Typing Buddy
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue!
+        
+        ⚠️ **CRITICAL PRIVACY NOTICE**:
+        Do **NOT** paste personal messages, passwords, confidential documents, or private text into this issue.
+        Sanitize any log excerpts from `predictor.log` to ensure no sensitive words are exposed.
+
+  - type: input
+    id: win_version
+    attributes:
+      label: Windows Version
+      description: e.g. Windows 11 Home 23H2, Windows 10 Pro 22H2
+      placeholder: Windows 11 Pro 64-bit
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: Python Version
+      description: Run `python --version`
+      placeholder: Python 3.11.8
+    validations:
+      required: true
+
+  - type: input
+    id: keyboard_layout
+    attributes:
+      label: Keyboard Layout & Language
+      description: e.g. English (US) QWERTY, English (India)
+      placeholder: English (US) QWERTY
+    validations:
+      required: true
+
+  - type: input
+    id: target_app
+    attributes:
+      label: Application Where Issue Occurred
+      description: e.g. Notepad, Chrome, Slack, VS Code, Word
+      placeholder: Notepad
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what went wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the problem.
+      placeholder: |
+        1. Open Notepad
+        2. Type "..."
+        3. Press pick key "1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized Log Output
+      description: Relevant messages from `%APPDATA%\typing-buddy\predictor.log` (remember: never include private text).
+
