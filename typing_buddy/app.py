@@ -36,7 +36,9 @@ from .tray import SystemTray
 logger = logging.getLogger("typing_buddy")
 
 # Virtual key constants
-F_KEY_MAP = {f"f{i}": 0x6F + i for i in range(1, 13)}
+PICK_KEY_MAP = {f"f{i}": 0x6F + i for i in range(1, 13)}
+PICK_KEY_MAP["tab"] = 0x09
+F_KEY_MAP = PICK_KEY_MAP  # Alias for backward compatibility
 VK_TAB = 0x09
 WM_KEYDOWN, WM_SYSKEYDOWN = 0x0100, 0x0104
 LLKHF_INJECTED = 0x10
@@ -103,7 +105,7 @@ def is_active():
 def build_pick_key_map(pick_keys_list):
     mapping = {}
     for idx, k_str in enumerate(pick_keys_list):
-        vk = F_KEY_MAP.get(k_str.strip().lower())
+        vk = PICK_KEY_MAP.get(k_str.strip().lower())
         if vk is not None:
             mapping[vk] = idx
     return mapping
@@ -573,6 +575,7 @@ def reload_wordlists():
         user_path=str(data_directory / "user_data.json"),
         added_path=str(data_directory / "added_words.json"),
         ignore_path=str(data_directory / "ignore_words.txt"),
+        new_word_mode=settings.new_word_mode if settings else "review",
     )
     new_pred.prewarm()
 
@@ -582,6 +585,8 @@ def reload_wordlists():
             predictor.keys = new_pred.keys
             predictor._cache = new_pred._cache
             predictor.learn_file = new_pred.learn_file
+            predictor.new_word_mode = new_pred.new_word_mode
+            predictor.AUTO_ADD_NEW_WORDS = (new_pred.new_word_mode == "auto")
     else:
         predictor = new_pred
 
@@ -655,9 +660,11 @@ def main():
         user_path=str(data_directory / "user_data.json"),
         added_path=str(data_directory / "added_words.json"),
         ignore_path=str(data_directory / "ignore_words.txt"),
+        new_word_mode=settings.new_word_mode,
     )
     predictor.LENGTH_BONUS = settings.length_bonus
-    predictor.AUTO_ADD_NEW_WORDS = settings.auto_add_new_words
+    predictor.new_word_mode = settings.new_word_mode
+    predictor.AUTO_ADD_NEW_WORDS = (settings.new_word_mode == "auto")
     predictor.NEW_WORD_MIN_COUNT = settings.new_word_min_count
     predictor.NEW_WORD_FREQ = settings.new_word_freq
     predictor.LEARN_RANKING = settings.learn_ranking
@@ -689,7 +696,8 @@ def main():
         PICK_KEYS = build_pick_key_map(new_data.get("pick_keys", []))
         if predictor:
             predictor.LENGTH_BONUS = new_data.get("length_bonus", 0.02)
-            predictor.AUTO_ADD_NEW_WORDS = new_data.get("auto_add_new_words", True)
+            predictor.new_word_mode = new_data.get("new_word_mode", "review")
+            predictor.AUTO_ADD_NEW_WORDS = (predictor.new_word_mode == "auto")
             predictor.NEW_WORD_MIN_COUNT = new_data.get("new_word_min_count", 3)
             predictor.NEW_WORD_FREQ = new_data.get("new_word_freq", 120)
             predictor.LEARN_RANKING = new_data.get("learn_ranking", True)
@@ -798,6 +806,7 @@ def main():
                         root,
                         added_path=str(data_directory / "added_words.json"),
                         on_delete_word=predictor.remove_word,
+                        on_keep_word=predictor.keep_word,
                     )
                 elif kind == "show_stats":
                     show_statistics_window(root, stats_tracker.get_summary())
