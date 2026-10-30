@@ -65,3 +65,4 @@ Copyright 2000-2018 by Kevin Atkinson. Permissive license.
 - **Author:** Typing Buddy Contributors
 - **License:** MIT License / CC0 1.0 Universal Public Domain Dedication
 - **Description:** Original curated list of common conversational Romanized Hindi terms (`theek`, `accha`, `kya`, `nahi`, etc.).
+

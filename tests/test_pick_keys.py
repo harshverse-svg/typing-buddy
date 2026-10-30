@@ -40,3 +40,4 @@ def test_typing_version_2_and_windows_10_with_popup_visible():
     state.suggestions = ["and", "is", "for"]
     assert pick_index(VK_1) is None, "Pressing '1' in 'Windows 10' must not pick suggestion [1]"
     assert pick_index(VK_0) is None, "Pressing '0' in 'Windows 10' must not pick a suggestion"
+

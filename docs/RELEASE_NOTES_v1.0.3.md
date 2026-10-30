@@ -28,3 +28,4 @@ Verify integrity on Windows PowerShell before running:
 ```powershell
 Get-FileHash .\typing-buddy.zip -Algorithm SHA256
 ```
+
