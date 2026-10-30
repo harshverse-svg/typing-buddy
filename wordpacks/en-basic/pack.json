@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Essential English vocabulary covering the top 5,000 most frequent words.",
   "language": "en",
-  "license": "Public Domain / MIT",
-  "source": "Derived from Google Web Trillion Word Corpus & SCOWL",
+  "license": "Public Domain (12Dicts/ENABLE) / Permissive",
+  "source": "SCOWL (http://wordlist.aspell.net/) & frequency rankings derived from OpenSubtitles via Hermit Dave",
   "word_count": 5000
 }
-

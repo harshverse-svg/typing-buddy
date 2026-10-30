@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Original starter list of 327 common Roman-script Hindi words for messaging and casual chats.",
   "language": "hi-Latn",
-  "license": "MIT",
-  "source": "Original community starter list",
+  "license": "MIT / CC0-1.0",
+  "source": "Typing Buddy Contributors (curated original starter list)",
   "word_count": 327
 }
