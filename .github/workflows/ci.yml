@@ -46,3 +46,6 @@ jobs:
         run: |
           python tools/check_no_personal_data.py
 
+      - name: Verify Documentation Version Links
+        run: |
+          python tools/check_docs_version.py

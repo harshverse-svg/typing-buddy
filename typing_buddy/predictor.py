@@ -76,7 +76,8 @@ class Predictor:
     # Default settings (can be updated from Settings)
     LENGTH_BONUS = 0.02          # favour longer words (set 0 to turn off)
     CACHE_K = 30                 # candidates cached per prefix
-    AUTO_ADD_NEW_WORDS = True    # add unknown words to personal word file
+    AUTO_ADD_NEW_WORDS = False   # Legacy flag, kept in sync with new_word_mode == "auto"
+    NEW_WORD_MODE = "review"     # "review" (default), "auto", or "off"
     NEW_WORD_MIN_COUNT = 3       # only after typing them this many times
     NEW_WORD_FREQ = 120          # number written next to an auto-added word
     LEARN_RANKING = True         # usage nudges ranking (user_data.json only)
@@ -88,6 +89,7 @@ class Predictor:
         user_path="user_data.json",
         added_path="added_words.json",
         ignore_path="ignore_words.txt",
+        new_word_mode: str = "review",
     ):
         if isinstance(paths, str):
             paths = [paths]
@@ -98,6 +100,8 @@ class Predictor:
         self.user_path = str(user_path)
         self.added_path = str(added_path)
         self.ignore_path = str(ignore_path)
+        self.new_word_mode = new_word_mode if new_word_mode in ("review", "auto", "off") else "review"
+        self.AUTO_ADD_NEW_WORDS = (self.new_word_mode == "auto")
 
         # Extension point for context rankers
         self.ranker_hook: Optional[Callable[[str, Optional[str], int, float], float]] = None
@@ -220,29 +224,70 @@ class Predictor:
             best = heapq.nlargest(n, cands, key=lambda w: self._score(w, prev, plen))
         return [self._match_case(w, prefix) for w in best]
 
+    def is_known_word(self, word: Optional[str]) -> bool:
+        """Return True if word is in active wordlist dictionaries or personal word file."""
+        if not word:
+            return False
+        return word.strip().lower() in self.freq
+
     def learn(self, word, prev=None):
-        """Learn usage counts and auto-add unknown words."""
+        """Learn usage counts for known words and handle new vocabulary learning.
+
+        - In 'review' mode (default): after being typed NEW_WORD_MIN_COUNT times,
+          an unknown word is queued in added_words.json for user approval. Nothing
+          is written to personal_words.txt automatically.
+        - In 'auto' mode: after NEW_WORD_MIN_COUNT times, it is auto-added to personal_words.txt.
+        - In 'off' mode: unknown words are completely ignored.
+        - Pending counters for unknown words are kept in-memory only.
+        - Word pairs (bigrams) are only stored when BOTH words are already known words.
+        """
         if not (2 <= len(word) <= 25) or not WORD_RE.fullmatch(word):
             return
         w_low = word.lower()
         with self.lock:
             if w_low in self.ignore_words:
                 return
-            if w_low not in self.freq and w_low not in self.uni:
-                if not self.AUTO_ADD_NEW_WORDS:
+
+            # Handle unknown words
+            if not self.is_known_word(w_low):
+                if self.new_word_mode == "off":
                     return
                 n = self.pending.get(w_low, 0) + 1
                 if n < self.NEW_WORD_MIN_COUNT:
                     self.pending[w_low] = n
-                    self._dirty()
+                    # In-memory only: do not mark dirty or save to disk
                     return
+                # Reached threshold
                 self.pending.pop(w_low, None)
-                self._add_word(w_low)
+                if self.new_word_mode == "auto":
+                    self._add_word(w_low)
+                elif self.new_word_mode == "review":
+                    self._queue_for_review(w_low)
+                return
+
+            # Known word: update ranking
             if self.LEARN_RANKING:
                 self.uni[w_low] += 1
-                if prev:
-                    self.bi[prev][w_low] += 1
-            self._dirty()
+                # Word pairs: store a pair only when BOTH words are already known words.
+                # Never use an unknown word as a key or value.
+                if prev and self.is_known_word(prev):
+                    p_low = prev.lower()
+                    self.bi[p_low][w_low] += 1
+                self._dirty()
+
+    def _queue_for_review(self, word):
+        """Queue an unknown word for user review in added_words.json without adding to personal_words.txt."""
+        self._record_added_word(word)
+        logger.info("Queued unknown word for user review: %s", word)
+
+    def keep_word(self, word):
+        """Approve a word from the review queue: add to personal word file and active dictionary."""
+        w = word.strip().lower()
+        with self.lock:
+            if w in self.ignore_words:
+                self.ignore_words.remove(w)
+            self._add_word(w)
+            self.save()
 
     def _add_word(self, word):
         self.freq[word] = self.NEW_WORD_FREQ
@@ -355,10 +400,16 @@ class Predictor:
         try:
             with open(self.user_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            self.uni.update(data.get("uni", {}))
+            # Only load frequency counts for known words
+            for w, c in data.get("uni", {}).items():
+                if self.is_known_word(w) and isinstance(c, int):
+                    self.uni[w] = c
+            # Only load word pairs where BOTH words are known words
             for p, d in data.get("bi", {}).items():
-                self.bi[p].update(d)
-            self.pending.update(data.get("pending", {}))
+                if self.is_known_word(p) and isinstance(d, dict):
+                    for nxt, c in d.items():
+                        if self.is_known_word(nxt) and isinstance(c, int):
+                            self.bi[p][nxt] = c
         except (OSError, ValueError):
             pass
 
@@ -369,7 +420,6 @@ class Predictor:
                 data = {
                     "uni": dict(self.uni),
                     "bi": {k: dict(v) for k, v in self.bi.items()},
-                    "pending": dict(self.pending),
                 }
             with open(tmp, "w", encoding="utf-8") as f:
                 json.dump(data, f, ensure_ascii=False)

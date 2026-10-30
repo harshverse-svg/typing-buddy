@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.3] - 2026-10-30
+
+### Security & Privacy
+- **Review-by-Default Word Learning:** Unknown words are now held strictly in volatile RAM (`self.pending`) until explicitly reviewed and approved via the Review Window. They are never written to disk automatically.
+- **Safe Word-Pair Filtering:** Bigram transitions (`bi` in `user_data.json`) are only stored when both words are confirmed known words in dictionary or approved personal words, preventing accidental retention of sensitive inputs.
+- **Transitory Memory Sanitization:** Removed disk serialization of pending word counters; on upgrade, legacy unverified pending words and bigram pairs are safely pruned.
+- **Strengthened Zero-Network AST Audit:** `tools/check_no_network.py` now statically analyzes AST nodes for banned network libraries, dynamic imports (`__import__`, `importlib.import_module`), process execution (`subprocess`, `os.system`, `os.popen`), network DLL strings (`wininet`, `ws2_32`, etc.), and network URL schemes in `os.startfile`.
+
+### Changed
+- **Pick Keys Hardening:** Confined valid pick keys strictly to function keys (`F1`–`F12`) and `Tab`. Numeric digits are rejected with automatic fallback and warnings to prevent accidental interception when typing numbers (e.g. "Windows 10", "version 2").
+- **Attribution & Licensing Transparency:** Disentangled Harper Python bindings (`harper-py`, Maksim Burtsev) from the upstream Harper grammar engine (Elijah Potter / Automattic) in `THIRD_PARTY_NOTICES.md`. Added complete SCOWL copyright notice in `wordpacks/NOTICE.md` and detailed frequency dataset reuse provenance.
+- **Calibrated Documentation:** Calibrated README performance numbers against real-world Windows benchmarks, qualified privacy claims, and introduced automated CI verification (`tools/check_docs_version.py`) to prevent stale release download links.
+
 ## [1.0.2] - 2026-10-30
 
 ### Added

@@ -3,7 +3,7 @@ message: "If you use or reference Typing Buddy in research or software, please c
 title: "Typing Buddy: An Offline, Privacy-First Typing Assistant and Autocomplete for Windows"
 authors:
   - name: "Typing Buddy Contributors"
-version: 1.0.2
+version: 1.0.3
 date-released: 2026-10-30
 license: MIT
 url: "https://github.com/harshverse-svg/typing-buddy"

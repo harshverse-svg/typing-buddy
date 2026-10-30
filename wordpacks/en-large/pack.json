@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Comprehensive English vocabulary with ~150,000 words for wide vocabulary coverage.",
   "language": "en",
-  "license": "Public Domain / MIT",
-  "source": "Hermit Dave FrequencyWords & SCOWL dictionary headwords",
+  "license": "Mixed (SCOWL permissive/Public Domain; OpenSubtitles frequency data reuse terms unverified)",
+  "source": "SCOWL (http://wordlist.aspell.net/) and Hermit Dave FrequencyWords (https://github.com/hermitdave/FrequencyWords)",
   "word_count": 150000
 }
-

@@ -15,10 +15,12 @@ class ReviewWindow:
     """Tkinter window to review, keep, or delete auto-added words."""
 
     def __init__(self, master: tk.Tk, added_path: str = "added_words.json",
-                 on_delete_word: Optional[Callable[[str], None]] = None):
+                 on_delete_word: Optional[Callable[[str], None]] = None,
+                 on_keep_word: Optional[Callable[[str], None]] = None):
         self.master = master
         self.added_path = os.path.abspath(added_path)
         self.on_delete_word = on_delete_word
+        self.on_keep_word = on_keep_word
 
         self.window = tk.Toplevel(master)
         self.window.title("Review Auto-Added Words")
@@ -93,6 +95,12 @@ class ReviewWindow:
             return
         item = selected[0]
         word = self.tree.item(item, "values")[0]
+
+        if self.on_keep_word:
+            try:
+                self.on_keep_word(word)
+            except Exception as e:
+                logger.error("Error executing on_keep_word for %s: %s", word, e)
 
         if os.path.exists(self.added_path):
             try:

@@ -1,0 +1,8 @@
+# tools/network_allowlist.txt
+#
+# Allowed exceptions for tools/check_no_network.py in format:
+# <file_path_relative>:<line_number>:<reason>
+#
+# Keep this file empty unless an exception is strictly justified and reviewed.
+
+typing_buddy/winapi.py:330: Invoking local tools/create_shortcuts.ps1 to manage Windows Startup folder shortcut
