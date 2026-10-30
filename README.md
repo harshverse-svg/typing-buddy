@@ -78,7 +78,7 @@ Choose either method below:
 > Download Python 3.10 or newer from [python.org/downloads](https://www.python.org/downloads/). During installation, be sure to check the box:  
 > **☑ "Add python.exe to PATH"** before clicking Install Now.
 
-1. Download the latest **`typing-buddy-v1.0.0.zip`** from [Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest).
+1. Download the latest release zip (`typing-buddy-v*.zip`) from [Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest).
 2. Extract the ZIP folder to your preferred location.
 3. Double-click **`install.bat`**.
    - Automatically sets up an isolated `.venv` environment and installs dependencies.

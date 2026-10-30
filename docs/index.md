@@ -25,7 +25,7 @@ description: "Instant autocomplete, word suggestions, fuzzy typo corrections, an
 
 ## Quick Installation
 
-1. Download `typing-buddy-v1.0.0.zip` from our [GitHub Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest).
+1. Download the latest release zip from our [GitHub Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest).
 2. Extract the folder and double-click `install.bat`.
 3. Launch Typing Buddy from your Desktop icon or Start menu.
 

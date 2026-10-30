@@ -1,5 +1,7 @@
 # Typing Buddy v1.0.0 — Initial Public Release
 
+> **Notice:** Superseded by v1.0.1 - please download the [latest release](https://github.com/harshverse-svg/typing-buddy/releases/latest).
+
 **Typing Buddy** is a fast, offline, privacy-first typing assistant, autocomplete, and grammar checker for Windows.
 
 ---
@@ -49,3 +51,4 @@ Get-FileHash typing-buddy-v1.0.0.zip -Algorithm SHA256
 ```
 
 Compare the calculated hash with the value published in `SHA256SUMS.txt`.
+

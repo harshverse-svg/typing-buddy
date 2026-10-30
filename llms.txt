@@ -23,7 +23,7 @@ git clone https://github.com/harshverse-svg/typing-buddy.git
 cd typing-buddy
 install.bat
 ```
-Run `start.bat` to launch in the background.
+Run `start.bat` to launch in the background. Alternatively, download the latest zip from [Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest), extract, and double-click `install.bat`.
 
 ## Key Files & Structure
 - `typing_buddy/app.py`: Main runtime, event hooks, threading pipelines, and GUI overlays.
