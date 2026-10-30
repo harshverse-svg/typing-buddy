@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2026-04-12
+
+### Fixed
+- Fixed unescaped `%APPDATA%` formatting token in `typing_buddy/app.py` CLI parser causing `ValueError` during `--version` and `--help`.
+- Updated test suite imports to directly reference `typing_buddy` package instead of deprecated root module names.
+- Cleaned up root repository layout by removing deprecated flat files (`app.py`, `fuzzy.py`, `predictor.py`, etc.).
+- Adjusted documentation and README performance claims to reflect measured benchmark latencies and resource numbers.
+- Added explicit Step 0 to installation guide for configuring Python on Windows PATH.
+- Documented Known Limitations regarding Windows-only architecture, admin elevation, and non-standard caret fields.
+
 ## [1.0.0] - 2026-04-12
 
 ### Changed

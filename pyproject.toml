@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "typing-buddy"
-version = "1.0.0"
+version = "1.0.1"
 description = "Fast, privacy-first offline typing assistant, autocomplete, spelling corrections, and grammar for Windows"
 readme = "README.md"
 authors = [{ name = "Typing Buddy Contributors" }]
