@@ -42,17 +42,28 @@ BENCHMARK_PAIRS = [
 
 @pytest.fixture(scope="module")
 def fuzzy_engine():
-    """Load words_main.txt and initialize FuzzyEngine."""
+    """Load wordpack and initialize FuzzyEngine."""
     words = {}
-    wordlist_path = os.path.join(os.path.dirname(__file__), "..", "words_main.txt")
-    if os.path.exists(wordlist_path):
-        with open(wordlist_path, "r", encoding="utf-8") as f:
-            for line in f:
-                if line.startswith("#"):
-                    continue
-                parts = line.split()
-                if parts:
-                    words[parts[0]] = int(parts[1]) if len(parts) > 1 else 1
+    base_dir = os.path.dirname(__file__)
+    candidates = [
+        os.path.join(base_dir, "..", "wordpacks", "en-large", "words.txt"),
+        os.path.join(base_dir, "..", "wordpacks", "en-basic", "words.txt"),
+        os.path.join(base_dir, "..", "words_main.txt"),
+    ]
+    for wordlist_path in candidates:
+        if os.path.exists(wordlist_path):
+            with open(wordlist_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.startswith("#"):
+                        continue
+                    parts = line.split()
+                    if parts:
+                        word = parts[0].lower()
+                        freq = int(parts[1]) if len(parts) > 1 else 1
+                        if word not in words or freq > words[word]:
+                            words[word] = freq
+            if len(words) >= 5000:
+                break
     engine = FuzzyEngine()
     engine.build_index_async(words)
     # Wait for background index
