@@ -6,7 +6,7 @@
   "pick_keys": ["F2", "F3", "F4"],
   "tab_picks_first": true,
   "pause_key": "pause",
-  "auto_add_new_words": true,
+  "new_word_mode": "review",
   "new_word_min_count": 3,
   "new_word_freq": 120,
   "learn_ranking": true,

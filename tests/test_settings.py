@@ -75,3 +75,36 @@ def test_settings_file_load_and_reload():
         cfg.reload()
         assert cfg.min_prefix == 4
 
+
+def test_pick_keys_digits_rejected():
+    raw = {"pick_keys": ["1", "2", "3"]}
+    cleaned = validate_settings(raw)
+    assert cleaned["pick_keys"] == ["F2", "F3", "F4"], "Digits must be rejected and fall back to defaults"
+
+
+def test_pick_keys_f_keys_and_tab_allowed():
+    raw = {"pick_keys": ["f1", "tab", "F12"]}
+    cleaned = validate_settings(raw)
+    assert cleaned["pick_keys"] == ["F1", "Tab", "F12"]
+
+
+def test_new_word_mode_validation():
+    for mode in ("review", "auto", "off"):
+        cleaned = validate_settings({"new_word_mode": mode})
+        assert cleaned["new_word_mode"] == mode
+
+    # Invalid mode falls back to default "review"
+    cleaned = validate_settings({"new_word_mode": "invalid_mode"})
+    assert cleaned["new_word_mode"] == "review"
+
+
+def test_new_word_mode_legacy_upgrade_path():
+    # If legacy auto_add_new_words is false, set mode to off
+    cleaned = validate_settings({"auto_add_new_words": False})
+    assert cleaned["new_word_mode"] == "off"
+
+    # If legacy auto_add_new_words is true and new_word_mode omitted, default to review
+    cleaned = validate_settings({"auto_add_new_words": True})
+    assert cleaned["new_word_mode"] == "review"
+
+

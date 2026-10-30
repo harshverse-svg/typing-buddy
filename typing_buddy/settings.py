@@ -17,7 +17,8 @@ DEFAULT_SETTINGS: Dict[str, Any] = {
     "pick_keys": ["F2", "F3", "F4"],
     "tab_picks_first": True,
     "pause_key": "pause",
-    "auto_add_new_words": True,
+    "new_word_mode": "review",  # "review" (default), "auto", or "off"
+    "auto_add_new_words": False,  # Kept in sync with new_word_mode == "auto" for backward compatibility
     "new_word_min_count": 3,
     "new_word_freq": 120,
     "learn_ranking": True,
@@ -41,7 +42,9 @@ DEFAULT_SETTINGS: Dict[str, Any] = {
     "grammar_show_reason": True,
 }
 
-VALID_F_KEYS = {f"f{i}": f"F{i}" for i in range(1, 13)}
+VALID_PICK_KEYS = {f"f{i}": f"F{i}" for i in range(1, 13)}
+VALID_PICK_KEYS["tab"] = "Tab"
+VALID_F_KEYS = VALID_PICK_KEYS  # Backward compatibility alias
 VALID_DIALECTS = {"american", "british", "australian", "canadian", "indian"}
 
 
@@ -83,16 +86,16 @@ def validate_settings(raw: dict) -> dict:
         else:
             logger.warning("Invalid 'max_suggestions'. Must be int between 1 and 9. Using default.")
 
-    # pick_keys: list of F1..F12, no duplicates
+    # pick_keys: list of F1..F12 and Tab, no duplicates
     if "pick_keys" in raw:
         val = raw["pick_keys"]
-        if isinstance(val, list) and 1 <= len(val) <= 12:
+        if isinstance(val, list) and 1 <= len(val) <= 13:
             canonical = []
             seen = set()
             valid = True
             for k in val:
-                if isinstance(k, str) and k.strip().lower() in VALID_F_KEYS:
-                    norm = VALID_F_KEYS[k.strip().lower()]
+                if isinstance(k, str) and k.strip().lower() in VALID_PICK_KEYS:
+                    norm = VALID_PICK_KEYS[k.strip().lower()]
                     if norm in seen:
                         valid = False
                         break
@@ -116,9 +119,20 @@ def validate_settings(raw: dict) -> dict:
     if "pause_key" in raw and isinstance(raw["pause_key"], str) and raw["pause_key"].strip():
         cleaned["pause_key"] = raw["pause_key"].strip().lower()
 
-    # auto_add_new_words: bool
-    if "auto_add_new_words" in raw and isinstance(raw["auto_add_new_words"], bool):
-        cleaned["auto_add_new_words"] = raw["auto_add_new_words"]
+    # new_word_mode: "review", "auto", "off"
+    if "new_word_mode" in raw and raw["new_word_mode"] in ("review", "auto", "off"):
+        cleaned["new_word_mode"] = raw["new_word_mode"]
+    elif "auto_add_new_words" in raw:
+        if raw["auto_add_new_words"] is False:
+            cleaned["new_word_mode"] = "off"
+        else:
+            cleaned["new_word_mode"] = "review"
+    else:
+        if "new_word_mode" in raw:
+            logger.warning("Invalid 'new_word_mode'. Must be 'review', 'auto', or 'off'. Using default.")
+
+    # auto_add_new_words: backward compatibility sync with new_word_mode
+    cleaned["auto_add_new_words"] = (cleaned["new_word_mode"] == "auto")
 
     # new_word_min_count: int >= 1
     if "new_word_min_count" in raw and isinstance(raw["new_word_min_count"], int) and raw["new_word_min_count"] >= 1:
