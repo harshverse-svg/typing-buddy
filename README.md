@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/python-3.10+-3776AB.svg?logo=python&logoColor=white" alt="Python 3.10+">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10+-3776AB.svg?logo=python&logoColor=white" alt="Python 3.10+"></a>
   <img src="https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D6.svg?logo=windows&logoColor=white" alt="Windows 10 | 11">
   <img src="https://img.shields.io/badge/network-100%25%20Offline-success.svg" alt="100% Offline">
   <a href="https://github.com/harshverse-svg/typing-buddy/actions/workflows/ci.yml"><img src="https://github.com/harshverse-svg/typing-buddy/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a>
@@ -25,7 +25,10 @@
 
 ## How It Looks
 
-<!-- Real recording placeholder: capture with ScreenToGif and save to assets/demo.gif (see assets/RECORDING_GUIDE.md) -->
+<!-- DEMO GIF PLACEHOLDER: Once recorded with ScreenToGif and saved to assets/demo.gif, uncomment the line below:
+<p align="center"><img src="assets/demo.gif" alt="Typing Buddy Live Demo" width="800"></p>
+-->
+
 <p align="center">
   <img src="assets/how-it-works.svg" alt="Typing Buddy Architecture Diagram" width="850">
 </p>
@@ -48,7 +51,7 @@ As you type in Notepad, Word, Slack, or your browser, a clean floating pill appe
 - ⚡ **RAM-Only Volatile Tracking:** Sentence tracking stays in RAM (max 300 characters) and is wiped on mouse clicks, arrow navigation, or focus switch. Never logged or saved to disk.
 - 🛡️ **Password Safety:** Automatically pauses whenever your cursor enters a password field or sensitive window.
 - 💬 **Hinglish Word Pack:** Romanized Hindi expressions (`kya`, `theek`, `accha`, `yaar`) are recognized without false typo or grammar flags.
-- 🪶 **Ultra Lightweight:** Idle CPU is 0.00%. Suggestions compute in 0.03 ms.
+- 🪶 **Ultra Lightweight:** Low idle CPU usage in our testing (~0.0% when inactive). Average suggestion lookup latency is sub-millisecond (< 0.2 ms).
 
 ---
 
@@ -70,11 +73,15 @@ As you type in Notepad, Word, Slack, or your browser, a clean floating pill appe
 Choose either method below:
 
 ### Method 1: Easy Installer (Recommended)
+
+> **Step 0 (If you do not have Python installed yet):**  
+> Download Python 3.10 or newer from [python.org/downloads](https://www.python.org/downloads/). During installation, be sure to check the box:  
+> **☑ "Add python.exe to PATH"** before clicking Install Now.
+
 1. Download the latest **`typing-buddy-v1.0.0.zip`** from [Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest).
 2. Extract the ZIP folder to your preferred location.
 3. Double-click **`install.bat`**.
-   - Verifies Python $\ge$ 3.10 (download from [python.org](https://www.python.org/) with "Add Python to PATH" checked).
-   - Sets up an isolated `.venv` environment and installs dependencies.
+   - Automatically sets up an isolated `.venv` environment and installs dependencies.
    - Prompts whether to create Desktop/Start menu icons and enable auto-start.
 4. Launch Typing Buddy anytime from your Desktop icon or Start menu!
 
@@ -140,8 +147,8 @@ Switch word packs on the fly from the System Tray menu or `%APPDATA%\typing-budd
 
 | Pack | Words | RAM Footprint | Notes |
 |---|---|---|---|
-| **`en-basic`** | 5,000 | ~120 MB | Enabled by default; covers 95% of daily English typing. |
-| **`en-large`** | 150,000 | ~330 MB | Optional; full dictionary for academic & technical writing. |
+| **`en-basic`** | 5,000 | ~125 MB | Enabled by default; covers common everyday English vocabulary. |
+| **`en-large`** | 150,000 | ~330 MB | Optional; comprehensive dictionary for academic & technical writing. |
 | **`hinglish`** | 320+ | < 1 MB | Common Roman-script Hindi dialogue (`kya`, `haan`, `theek`, `accha`). |
 
 To list packs from terminal:
@@ -178,6 +185,15 @@ Typing Buddy is built on a **zero-trust local privacy architecture**:
 - **Volatile Text Buffer:** Sentence context is tracked in RAM only (`TextTracker`, 300 char cap). It is wiped on clicks, cursor navigation, window changes, and pauses.
 - **Is this a Keylogger?**  
   Keyloggers secretly record and save your sentences to disk or transmit them to cloud servers. Typing Buddy does neither: it runs 100% offline, stores zero sentence logs, only counts individual word frequencies for ranking, and is fully open source. Read [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md).
+
+---
+
+## Known Limitations
+
+- **Windows Only:** Typing Buddy relies on the Windows Win32 API and UI Automation (UIA) to position the suggestion overlay and detect password fields; macOS and Linux are not supported.
+- **Requires Python:** Needs Python 3.10 or newer installed on your system with "Add Python to PATH" enabled.
+- **Administrator Elevation:** If an application (such as an elevated Command Prompt, PowerShell, or Regedit) runs as Administrator, Windows User Interface Privilege Isolation (UIPI) blocks keystroke interception unless Typing Buddy is also run as Administrator.
+- **Specialized Applications:** Direct3D/fullscreen games, remote desktop sessions (RDP/Citrix), and custom security windows may not expose standard caret positions or report input fields. The global Pause hotkey (`Pause/Break`) is always available as a manual safety net.
 
 ---
 

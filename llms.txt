@@ -36,6 +36,12 @@ Run `start.bat` to launch in the background.
 - `tools/check_no_network.py`: AST parser verifying complete absence of network libraries.
 - `tools/check_no_personal_data.py`: Pre-commit/CI validator preventing sensitive file leakage.
 
+## Known Limitations
+- Windows only (relies on Win32 API and UI Automation).
+- Requires Python 3.10+ with "Add Python to PATH".
+- Intercepting typing in elevated Administrator windows requires running Typing Buddy as Administrator.
+- Games, remote desktops, or apps that do not expose standard caret positions cannot position the floating pill.
+
 ## Technical Specifications
 - Language: Python 3.10+
 - Platform: Microsoft Windows 10 / 11 (64-bit)
