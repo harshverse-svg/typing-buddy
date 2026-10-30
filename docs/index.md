@@ -8,7 +8,7 @@ description: "Instant autocomplete, word suggestions, fuzzy typo corrections, an
 
 **The offline, privacy-first typing assistant and autocomplete for Windows.**
 
-[Download Latest Release](https://github.com/harshverse-svg/typing-buddy/releases/latest) • [View on GitHub](https://github.com/harshverse-svg/typing-buddy) • [Privacy Policy](https://github.com/harshverse-svg/typing-buddy/blob/main/PRIVACY.md)
+[Download for Windows](https://github.com/harshverse-svg/typing-buddy/releases/latest/download/typing-buddy.zip) • [Installation Guide](install.md) • [All Versions](install.md#all-versions) • [View on GitHub](https://github.com/harshverse-svg/typing-buddy) • [Privacy Policy](https://github.com/harshverse-svg/typing-buddy/blob/main/PRIVACY.md)
 
 ---
 
@@ -25,9 +25,11 @@ description: "Instant autocomplete, word suggestions, fuzzy typo corrections, an
 
 ## Quick Installation
 
-1. Download the latest release zip from our [GitHub Releases](https://github.com/harshverse-svg/typing-buddy/releases/latest).
+1. Download the latest package: **[Download for Windows](https://github.com/harshverse-svg/typing-buddy/releases/latest/download/typing-buddy.zip)**.
 2. Extract the folder and double-click `install.bat`.
 3. Launch Typing Buddy from your Desktop icon or Start menu.
+
+For step-by-step instructions and troubleshooting, see the [Installation Guide](install.md) or check [All versions](install.md#all-versions).
 
 ---
 

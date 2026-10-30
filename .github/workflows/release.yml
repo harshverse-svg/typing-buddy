@@ -22,15 +22,28 @@ jobs:
           python-version: "3.11"
 
       - name: Prepare Release Archive
+        id: prep_release
         shell: powershell
         run: |
           $tag = "${{ github.ref_name }}"
-          $archiveName = "typing-buddy-$tag.zip"
-          
+          $versionedZip = "typing-buddy-$tag.zip"
+          $latestZip = "typing-buddy.zip"
+
+          $isPrerelease = ($tag -match '-(rc|beta|alpha)')
+          if ($isPrerelease) {
+            $prereleaseVal = "true"
+            $makeLatestVal = "false"
+          } else {
+            $prereleaseVal = "false"
+            $makeLatestVal = "true"
+          }
+          "prerelease=$prereleaseVal" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "make_latest=$makeLatestVal" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
           # Stage clean release directory
           $stage = "release_stage"
           New-Item -ItemType Directory -Path $stage | Out-Null
-          
+
           # Copy source, scripts, wordpacks, assets, and docs
           Copy-Item -Recurse -Path "typing_buddy" -Destination "$stage/typing_buddy"
           Copy-Item -Recurse -Path "wordpacks" -Destination "$stage/wordpacks"
@@ -39,21 +52,50 @@ jobs:
           Copy-Item -Path "install.bat", "start.bat", "uninstall.bat", "pyproject.toml" -Destination "$stage/"
           Copy-Item -Path "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "PRIVACY.md", "SECURITY.md", "CHANGELOG.md" -Destination "$stage/"
           Copy-Item -Path "settings.example.json", "snippets.example.json", "personal_words.example.txt" -Destination "$stage/"
-          
-          # Compress to zip
-          Compress-Archive -Path "$stage/*" -DestinationPath $archiveName -Force
-          
-          # Calculate SHA256 checksum
-          $hash = (Get-FileHash -Path $archiveName -Algorithm SHA256).Hash.ToLower()
-          "$hash  $archiveName" | Out-File -Encoding ascii -FilePath "SHA256SUMS.txt"
-          
-          Write-Host "Archive created: $archiveName"
-          Write-Host "Checksum: $hash"
+
+          # Embed VERSION text file
+          "$tag`r`n" | Out-File -Encoding ascii -FilePath "$stage/VERSION"
+
+          # Compress to versioned zip
+          Compress-Archive -Path "$stage/*" -DestinationPath $versionedZip -Force
+
+          # Create duplicate fixed-name zip
+          Copy-Item -Path $versionedZip -Destination $latestZip -Force
+
+          # Calculate SHA256 checksums
+          $h1 = (Get-FileHash -Path $versionedZip -Algorithm SHA256).Hash.ToLower()
+          $h2 = (Get-FileHash -Path $latestZip -Algorithm SHA256).Hash.ToLower()
+          @("$h1  $versionedZip", "$h2  $latestZip") | Out-File -Encoding ascii -FilePath "SHA256SUMS.txt"
+
+          Write-Host "Created $versionedZip ($h1)"
+          Write-Host "Created $latestZip ($h2)"
 
       - name: Create GitHub Release
+        id: create_release
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            typing-buddy-*.zip
+            typing-buddy-${{ github.ref_name }}.zip
+            typing-buddy.zip
             SHA256SUMS.txt
+          prerelease: ${{ steps.prep_release.outputs.prerelease == 'true' }}
+          make_latest: ${{ steps.prep_release.outputs.make_latest }}
           generate_release_notes: true
+
+      - name: Verify Uploaded Assets
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $expected = @("typing-buddy-$tag.zip", "typing-buddy.zip", "SHA256SUMS.txt")
+          $release = gh release view $tag --json assets | ConvertFrom-Json
+          $assetNames = $release.assets | ForEach-Object { $_.name }
+          Write-Host "Uploaded assets: $($assetNames -join ', ')"
+          foreach ($exp in $expected) {
+            if ($assetNames -notcontains $exp) {
+              Write-Error "Missing required asset in release: $exp"
+              exit 1
+            }
+          }
+          Write-Host "All required release assets verified successfully."

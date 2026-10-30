@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.2] - 2026-10-30
+
+### Added
+- Permanent direct download link for Windows (`typing-buddy.zip`) pointing to the latest release assets.
+- Dual-asset release packaging (`typing-buddy-vX.Y.Z.zip` and `typing-buddy.zip`) with embedded `VERSION` file and `SHA256SUMS.txt`.
+- Automated release workflow asset verification step that fails the build if any release asset is missing.
+- Comprehensive installation guide in `docs/install.md` and `README.md` with step-by-step instructions (Steps 0–6).
+- Detailed installation troubleshooting section covering SmartScreen, Smart App Control, antivirus keyboard-hook false positives, and missing tray icon diagnostics.
+- "All versions" historical releases table across documentation.
+- Maintainer release guide and pre-flight checklist in `docs/RELEASING.md`.
+
 ## [1.0.1] - 2026-04-12
 
 ### Fixed
